@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InkamBD - Earn Online</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body id="bodyTag">
+    <div style="padding: 20px; display: flex; justify-content: space-between; align-items: center;">
+        <span class="brand-name">InkamBD</span>
+        <button onclick="toggleMode()" style="background:none; border:none; color:#6c5ce7; font-size: 22px; cursor:pointer;"><i id="modeIcon" class="fas fa-moon"></i></button>
+    </div>
+
+    <div class="card">
+        <p style="font-size: 14px; opacity: 0.8;">মোট ইনকাম ব্যালেন্স</p>
+        <h1 id="mainBal" style="font-size: 48px; margin: 5px 0; font-weight: 800;">৳ ০.০০</h1>
+        <button class="btn" style="background:#6c5ce7" onclick="openHistory()"><i class="fas fa-history"></i> ইনকাম ইতিহাস ও গ্রাফ</button>
+    </div>
+
+    <div class="card">
+        <p id="secTxt" style="display:none; color:#ff7675; font-weight:bold; margin-bottom: 10px;"></p>
+        <button id="adBtn" class="btn" style="background:linear-gradient(45deg, #a29bfe, #6c5ce7)" onclick="startTask()"><i class="fas fa-play"></i> বিজ্ঞাপন দেখুন (৳৩.৭)</button>
+    </div>
+
+    <div class="card">
+        <h3 style="margin-top: 0;">টাকা উত্তোলন</h3>
+        <select id="method"><option value="bKash">বিকাশ (bKash)</option><option value="Nagad">নগদ (Nagad)</option></select>
+        <input id="wNum" type="number" placeholder="আপনার নম্বর">
+        <input id="wAmt" type="number" placeholder="পরিমাণ (১০০০ - ১০০০০)">
+        <button class="btn" style="background:#e17055" onclick="withdraw()">উইথড্র রিকোয়েস্ট</button>
+    </div>
+
+    <div id="historyModal" class="modal">
+        <div class="card" style="max-width: 500px; margin: auto;">
+            <h3>📊 ইনকাম রিপোর্ট ও ইতিহাস</h3>
+            <canvas id="incomeChart"></canvas>
+            <table>
+                <thead><tr style="background:#6c5ce7; color:#fff;"><th>তারিখ</th><th>বিজ্ঞাপন</th><th>টাকা</th></tr></thead>
+                <tbody id="historyBody"></tbody>
+            </table>
+            <button class="btn" style="background:#ff7675; margin-top: 15px;" onclick="closeHistory()">বন্ধ করুন</button>
+        </div>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>
