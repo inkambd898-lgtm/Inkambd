@@ -24,7 +24,9 @@
 
     <div class="card">
         <p id="secTxt" style="display:none; color:#ff7675; font-weight:bold; margin-bottom: 10px;"></p>
-        <button id="adBtn" class="btn" style="background:linear-gradient(45deg, #a29bfe, #6c5ce7)" onclick="startTask()"><i class="fas fa-play"></i> বিজ্ঞাপন দেখুন (৳৩.৭)</button>
+        <button id="adBtn" class="btn" style="background:linear-gradient(45deg, #a29bfe, #6c5ce7)" onclick="startTask()">
+            <i class="fas fa-play"></i> বিজ্ঞাপন দেখুন (৳৩.৭)
+        </button>
     </div>
 
     <div class="card">
@@ -36,13 +38,17 @@
     </div>
 
     <div id="historyModal" class="modal">
-        <div class="card" style="max-width: 500px; margin: auto;">
-            <h3>📊 ইনকাম রিপোর্ট ও ইতিহাস</h3>
-            <canvas id="incomeChart"></canvas>
-            <table>
-                <thead><tr style="background:#6c5ce7; color:#fff;"><th>তারিখ</th><th>বিজ্ঞাপন</th><th>টাকা</th></tr></thead>
-                <tbody id="historyBody"></tbody>
-            </table>
+        <div class="card" style="max-width: 500px; margin: 20px auto; text-align: left;">
+            <h3 style="text-align:center;">📊 ইনকাম রিপোর্ট ও ইতিহাস</h3>
+            <div style="background:rgba(255,255,255,0.05); padding:10px; border-radius:15px;">
+                <canvas id="incomeChart"></canvas>
+            </div>
+            <div style="max-height: 250px; overflow-y: auto; margin-top: 15px;">
+                <table style="width:100%;">
+                    <thead><tr style="background:#6c5ce7; color:#fff;"><th>তারিখ</th><th>অ্যাড</th><th>টাকা</th></tr></thead>
+                    <tbody id="historyBody"></tbody>
+                </table>
+            </div>
             <button class="btn" style="background:#ff7675; margin-top: 15px;" onclick="closeHistory()">বন্ধ করুন</button>
         </div>
     </div>
