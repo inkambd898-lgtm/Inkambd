@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>InkamBD - By Obaidur Rahman</title>
+    <title>InkamBD -</title>
     
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
@@ -11,17 +11,17 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
-        :root { --bg: #0f0c29; --card: rgba(255, 255, 255, 0.08); --text: #fff; --main: #6c5ce7; }
+        :root { --bg: #0f0c29; --card: rgba(255, 255, 255, 0.08); --text: #fff; --main: #6c5ce7; --offer: #fdcb6e; }
         .light-mode { --bg: #f5f6fa; --card: #fff; --text: #2d3436; }
         body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', sans-serif; transition: 0.3s; margin: 0; text-align: center; }
         .brand-name { font-size: 28px; font-weight: 900; background: linear-gradient(135deg, #6c5ce7, #a29bfe, #00cec9); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .card { background: var(--card); margin: 15px auto; padding: 25px; border-radius: 25px; max-width: 450px; border: 1px solid rgba(108, 92, 231, 0.2); box-shadow: 0 8px 32px rgba(0,0,0,0.3); }
+        .card { background: var(--card); margin: 15px auto; padding: 25px; border-radius: 20px; max-width: 450px; border: 1px solid rgba(108, 92, 231, 0.2); box-shadow: 0 8px 32px rgba(0,0,0,0.3); position: relative; }
         .btn { width: 100%; padding: 15px; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; margin-top: 10px; color: white; display: flex; align-items: center; justify-content: center; gap: 10px; transition: 0.3s; }
-        input, select { width: 95%; padding: 12px; margin: 8px 0; border-radius: 10px; border: 1px solid var(--main); background: rgba(0,0,0,0.1); color: var(--text); outline: none; }
+        input, select { width: 90%; padding: 12px; margin: 8px 0; border-radius: 10px; border: 1px solid var(--main); background: rgba(0,0,0,0.1); color: var(--text); outline: none; }
         .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 1000; overflow-y: auto; padding-top: 20px; }
-        table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 12px; }
-        th, td { border: 1px solid rgba(255,255,255,0.1); padding: 10px; text-align: center; }
-        .notice-text { text-align: left; font-size: 14px; line-height: 1.6; }
+        .ref-box { background: rgba(108, 92, 231, 0.1); padding: 10px; border-radius: 10px; border: 1px dashed var(--main); font-size: 13px; word-break: break-all; margin-top: 10px; cursor: pointer; }
+        .offer-badge { background: #d63031; color: #fff; padding: 5px 10px; border-radius: 5px; font-size: 12px; position: absolute; top: -10px; right: 10px; animation: bounce 1s infinite; }
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
     </style>
 </head>
 <body id="bodyTag">
@@ -34,18 +34,30 @@
     <div class="card">
         <p style="font-size: 14px; opacity: 0.8;">মোট ইনকাম ব্যালেন্স</p>
         <h1 id="mainBal" style="font-size: 48px; margin: 5px 0; font-weight: 800;">৳ ০.০০</h1>
-        <button class="btn" style="background:#6c5ce7" onclick="openHistory()"><i class="fas fa-history"></i> ইনকাম ইতিহাস ও গ্রাফ</button>
+        <button class="btn" style="background:#6c5ce7" onclick="openHistory()"><i class="fas fa-history"></i> ইনকাম ইতিহাস</button>
     </div>
 
     <div class="card">
-        <p id="secTxt" style="display:none; color:#ff7675; font-weight:bold; margin-bottom: 10px;"></p>
+        <h3 style="margin:0;"><i class="fas fa-users"></i> আপনার রেফার লিংক</h3>
+        <p style="font-size: 12px;">প্রতি রেফারে পাবেন ৯৯.৭ টাকা!</p>
+        <div class="ref-box" id="refLink" onclick="copyRef()">লোড হচ্ছে...</div>
+    </div>
+
+    <div class="card" style="border: 1px solid #fdcb6e;">
+        <span class="offer-badge">মেগা অফার</span>
+        <h3 style="margin:0; color:#fdcb6e;"><i class="fas fa-gift"></i> বিশেষ বোনাস অফার</h3>
+        <p style="font-size: 13px; text-align: left;">১০,০০০ টাকা এক সাথে উইথড্র করলে ১৫০০ টাকা ক্যাশব্যাক এবং সকল রেফারের টাকা ডাবল পাবেন!</p>
+    </div>
+
+    <div class="card">
+        <p id="secTxt" style="display:none; color:#ff7675; font-weight:bold;"></p>
         <button id="adBtn" class="btn" style="background:linear-gradient(45deg, #a29bfe, #6c5ce7)" onclick="startTask()">
             <i class="fas fa-play"></i> বিজ্ঞাপন দেখুন (৳৩.৭)
         </button>
     </div>
 
     <div class="card">
-        <h3 style="margin-top: 0;">টাকা উত্তোলন</h3>
+        <h3 style="margin:0;">টাকা উত্তোলন</h3>
         <select id="method"><option value="bKash">বিকাশ (bKash)</option><option value="Nagad">নগদ (Nagad)</option></select>
         <input id="wNum" type="number" placeholder="আপনার নম্বর">
         <input id="wAmt" type="number" placeholder="পরিমাণ (১০০০ - ১০০০০)">
@@ -53,22 +65,14 @@
     </div>
 
     <div id="noticeModal" class="modal" style="display:block;">
-        <div class="card" style="max-width: 430px; margin: 5% auto; border: 2px solid #6c5ce7;">
-            <h3 style="color:#6c5ce7; margin-bottom: 15px;">📢 বিশেষ ঘোষণা! 📢</h3>
-            <div class="notice-text">
-                <p>✨ <b>রেফার বোনাস:</b> প্রতিটি সফল রেফারে ৯৯.৭ টাকা! 💰</p>
-                <p>🔥 <b>মেগা বোনাস:</b> ১০,০০০ টাকা উত্তোলনে ১৫০০ টাকা বোনাস ও আগের রেফারের টাকা দ্বিগুণ! 🚀</p>
-                <p>🗓️ <b>পেমেন্ট:</b> আবেদন করার পর মাসের ১ থেকে ১৫ তারিখের মধ্যে পেমেন্ট পাবেন। ✅</p>
-            </div>
-            <button class="btn" style="background:#6c5ce7;" onclick="closeNotice()">ঠিক আছে</button>
-        </div>
-    </div>
-
-    <div id="historyModal" class="modal">
-        <div class="card" style="max-width: 500px; margin: auto;">
-            <h3>📊 ইনকাম রিপোর্ট</h3>
-            <canvas id="incomeChart"></canvas>
-            <button class="btn" style="background:#ff7675; margin-top: 15px;" onclick="closeHistory()">বন্ধ করুন</button>
+        <div class="card" style="max-width: 400px; margin: 10% auto; text-align: left;">
+            <h3 style="text-align:center; color:#6c5ce7;">📢 বিশেষ ঘোষণা!</h3>
+            <p style="font-size: 14px; line-height: 1.6;">
+                ✨ <b>রেফার বোনাস:</b> প্রতিটি সফল রেফারে ৯৯.৭ টাকা! <br>
+                🔥 <b>মেগা বোনাস:</b> ১০,০০০ টাকা উইথড্রতে ১৫০০ টাকা ক্যাশব্যাক ও দ্বিগুণ রেফার বোনাস!<br>
+                🗓️ <b>পেমেন্ট:</b> প্রতি মাসের ১ থেকে ১৫ তারিখের মধ্যে পেমেন্ট করা হবে।
+            </p>
+            <button class="btn" style="background:#6c5ce7;" onclick="closeNotice()">বুঝেছি</button>
         </div>
     </div>
 
@@ -78,14 +82,13 @@
         const db = firebase.database();
 
         let balance = parseFloat(localStorage.getItem('my_balance')) || 0;
-        let userId = localStorage.getItem('user_id') || 'U' + Math.floor(Math.random()*900000);
-        let logs = JSON.parse(localStorage.getItem('income_logs')) || {};
-
+        let userId = localStorage.getItem('user_id') || 'ID' + Math.floor(Math.random()*90000);
+        
         function updateUI() {
             document.getElementById('mainBal').innerText = "৳ " + balance.toFixed(2);
+            document.getElementById('refLink').innerText = window.location.origin + "/?ref=" + userId;
             localStorage.setItem('my_balance', balance.toFixed(2));
             localStorage.setItem('user_id', userId);
-            localStorage.setItem('income_logs', JSON.stringify(logs));
             db.ref('users/' + userId).set({ userId, balance: balance.toFixed(2) });
         }
 
@@ -98,13 +101,9 @@
                 time--;
                 if(time < 0) {
                     clearInterval(itv); txt.style.display = 'none'; btn.disabled = false;
-                    let adLink = "https://www.effectivegatecpm.com/w6arakqmr0?key=cfe5b3bf60645ca848c57f56fdc4be23";
-                    let adWindow = window.open(adLink, "_blank");
-                    if(adWindow) {
-                        balance += 3.7; logIncome(3.7); updateUI();
-                    } else {
-                        alert("অ্যাড দেখার জন্য পপ-আপ এলাও করুন!");
-                    }
+                    let adWin = window.open("https://www.effectivegatecpm.com/w6arakqmr0?key=cfe5b3bf60645ca848c57f56fdc4be23", "_blank");
+                    if(adWin) { balance += 3.7; updateUI(); } 
+                    else { alert("পপ-আপ এলাও করুন!"); }
                 }
             }, 1000);
         }
@@ -112,28 +111,22 @@
         function withdraw() {
             let amt = parseFloat(document.getElementById('wAmt').value);
             let num = document.getElementById('wNum').value;
-            let method = document.getElementById('method').value;
             if(num.length >= 11 && amt >= 1000 && balance >= amt) {
-                balance -= amt; // টাকা কাটা হচ্ছে
+                balance -= amt; // ব্যালেন্স থেকে টাকা কাটা
                 updateUI();
-                db.ref('withdraws').push({ userId, method, number: num, amount: amt, time: new Date().toLocaleString() });
-                alert("সফল! আপনার ব্যালেন্স থেকে " + amt + " টাকা কাটা হয়েছে।");
-            } else {
-                alert("সঠিক তথ্য বা পর্যাপ্ত ব্যালেন্স নেই।");
-            }
+                db.ref('withdraws').push({ userId, number: num, amount: amt, time: new Date().toLocaleString() });
+                alert("সফলভাবে টাকা কাটা হয়েছে! পেমেন্ট শিডিউল অনুযায়ী পাবেন।");
+            } else { alert("সঠিক তথ্য বা ব্যালেন্স নেই।"); }
         }
 
-        function logIncome(amt) {
-            const date = new Date().toLocaleDateString('bn-BD');
-            if(!logs[date]) logs[date] = { ads: 0, total: 0 };
-            logs[date].ads += 1; logs[date].total += amt;
+        function copyRef() {
+            navigator.clipboard.writeText(document.getElementById('refLink').innerText);
+            alert("রেফার লিংক কপি হয়েছে!");
         }
 
         function closeNotice() { document.getElementById('noticeModal').style.display = 'none'; }
-        function openHistory() { document.getElementById('historyModal').style.display = 'block'; }
-        function closeHistory() { document.getElementById('historyModal').style.display = 'none'; }
         function toggleMode() { document.getElementById('bodyTag').classList.toggle('light-mode'); }
-
+        
         updateUI();
     </script>
 </body>
