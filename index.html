@@ -3,11 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>InkamBD - Earn Money Online</title>
+    <title>InkamBD</title>
     
     <meta property="og:title" content="InkamBD">
-    <meta property="og:description" content="Watch Ads and Earn Money">
-    <meta name="description" content="Watch Ads and Earn Money">
+    <meta property="og:description" content="প্রতিদিন ইনকাম করুন অনলাইনে">
     
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
@@ -33,7 +32,7 @@
     </div>
 
     <div class="card">
-        <p style="font-size: 14px; opacity: 0.8;">মোট ব্যালেন্স</p>
+        <p style="font-size: 14px; opacity: 0.8;">মোট ইনকাম ব্যালেন্স</p>
         <h1 id="mainBal" style="font-size: 48px; margin: 5px 0; font-weight: 800;">৳ ০.০০</h1>
         <p id="secTxt" style="display:none; color:#ff7675; font-weight:bold; margin-bottom: 10px;"></p>
         <button id="adBtn" class="btn" style="background:linear-gradient(45deg, #a29bfe, #6c5ce7)" onclick="startTask()">
@@ -43,25 +42,31 @@
 
     <div class="card">
         <h3 style="margin:0;"><i class="fas fa-users"></i> আপনার রেফার লিংক</h3>
-        <div class="ref-box" id="refLink">লোডিং...</div>
+        <div class="ref-box" id="refLink">লিংক তৈরি হচ্ছে...</div>
         <button class="btn" style="background:#00b894;" onclick="copyRef()">
             <i class="fas fa-copy"></i> লিংক কপি করুন
         </button>
     </div>
 
     <div class="card">
-        <h3 style="margin:0;">উত্তোলন</h3>
-        <select id="method"><option value="bKash">বিকাশ</option><option value="Nagad">নগদ</option></select>
-        <input id="wNum" type="number" placeholder="নম্বর">
-        <input id="wAmt" type="number" placeholder="পরিমাণ">
-        <button class="btn" style="background:#e17055" onclick="withdraw()">সাবমিট</button>
+        <h3 style="margin:0;">টাকা উত্তোলন</h3>
+        <select id="method"><option value="bKash">বিকাশ (bKash)</option><option value="Nagad">নগদ (Nagad)</option></select>
+        <input id="wNum" type="number" placeholder="আপনার নম্বর">
+        <input id="wAmt" type="number" placeholder="পরিমাণ (১০০০ - ১০০০০)">
+        <button class="btn" style="background:#e17055" onclick="withdraw()">উইথড্র রিকোয়েস্ট</button>
+    </div>
+
+    <div class="card" style="border: 2px solid #fdcb6e; margin-bottom: 40px;">
+        <h3 style="margin:0; color:#fdcb6e;"><i class="fas fa-gift"></i> বিশেষ বোনাস অফার</h3>
+        <p style="font-size: 13px; text-align: left;">একত্রে ১০,০০০ টাকা উত্তোলন করলে অতিরিক্ত ১৫০০ টাকা ক্যাশব্যাক বোনাস! 🎁 এছাড়া আগের সকল রেফারের টাকা পাবেন দ্বিগুণ (Double)! রেফার এর টাকা বিকাশ/নগদ ব্যালেন্স এর সাথে পাঠানো হবে🚀</p>
     </div>
 
     <div id="noticeModal" class="modal" style="display:block;">
         <div class="card" style="max-width: 420px; margin: 5% auto; text-align: left; border: 2px solid #6c5ce7;">
-            <h3 style="text-align:center; color:#6c5ce7;">📢 নোটিশ</h3>
+            <h3 style="text-align:center; color:#6c5ce7;">📢 বিশেষ ঘোষণা! 📢</h3>
             <p style="font-size: 14px; line-height: 1.6;">
-                প্রতিটি সফল রেফারে ৯৯.৭ টাকা বোনাস! একত্রে ১০,০০০ টাকা উত্তোলন করলে অতিরিক্ত ১৫০০ টাকা ক্যাশব্যাক।
+                ✨ <b>রেফার বোনাস:</b> প্রতিটি সফল রেফারে ৯৯.৭ টাকা! এই টাকা মূল ব্যালেন্সের সাথে পাবেন। 💰<br><br>
+                🗓️ <b>পেমেন্ট:</b> প্রতি মাসের ১ থেকে ১৫ তারিখের মধ্যে। ✅
             </p>
             <button class="btn" style="background:#6c5ce7;" onclick="closeNotice()">ঠিক আছে</button>
         </div>
@@ -89,12 +94,17 @@
             btn.disabled = true; txt.style.display = 'block';
             let time = 7;
             let itv = setInterval(() => {
-                txt.innerText = "অপেক্ষা করুন... " + time + "s";
+                txt.innerText = "নিরাপত্তা যাচাই... " + time + "s";
                 time--;
                 if(time < 0) {
                     clearInterval(itv); txt.style.display = 'none'; btn.disabled = false;
-                    window.open("https://www.effectivegatecpm.com/w6arakqmr0?key=cfe5b3bf60645ca848c57f56fdc4be23", "_blank");
-                    balance += 3.7; updateUI();
+                    const adLink = "https://www.effectivegatecpm.com/w6arakqmr0?key=cfe5b3bf60645ca848c57f56fdc4be23";
+                    let a = document.createElement('a');
+                    a.href = adLink;
+                    a.target = '_blank';
+                    a.click();
+                    balance += 3.7; 
+                    updateUI();
                 }
             }, 1000);
         }
@@ -102,18 +112,18 @@
         function withdraw() {
             let amt = parseFloat(document.getElementById('wAmt').value);
             if(amt >= 1000 && balance >= amt) {
-                balance -= amt; updateUI(); alert("সফল হয়েছে!");
+                balance -= amt; updateUI();
+                alert("উইথড্র রিকোয়েস্ট সফল হয়েছে।");
             } else { alert("পর্যাপ্ত ব্যালেন্স নেই।"); }
         }
 
         function copyRef() {
             const link = document.getElementById('refLink').innerText;
-            navigator.clipboard.writeText(link).then(() => alert("কপি হয়েছে!"));
+            navigator.clipboard.writeText(link).then(() => alert("রেফার লিংক কপি হয়েছে!"));
         }
 
         function closeNotice() { document.getElementById('noticeModal').style.display = 'none'; }
         function toggleMode() { document.getElementById('bodyTag').classList.toggle('light-mode'); }
-        
         window.onload = updateUI;
     </script>
 </body>
