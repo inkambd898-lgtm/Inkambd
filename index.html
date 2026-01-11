@@ -3,14 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>InkamBD - Earn Online</title>
-    <link rel="stylesheet" href="style.css">
+    <title>InkamBD - By Obaidur Rahman</title>
+    
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root { --bg: #0f0c29; --card: rgba(255, 255, 255, 0.08); --text: #fff; --main: #6c5ce7; }
+        .light-mode { --bg: #f5f6fa; --card: #fff; --text: #2d3436; }
+        body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', sans-serif; transition: 0.3s; margin: 0; text-align: center; }
+        .brand-name { font-size: 28px; font-weight: 900; background: linear-gradient(135deg, #6c5ce7, #a29bfe, #00cec9); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .card { background: var(--card); margin: 15px auto; padding: 25px; border-radius: 25px; max-width: 450px; border: 1px solid rgba(108, 92, 231, 0.2); box-shadow: 0 8px 32px rgba(0,0,0,0.3); }
+        .btn { width: 100%; padding: 15px; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; margin-top: 10px; color: white; display: flex; align-items: center; justify-content: center; gap: 10px; transition: 0.3s; }
+        input, select { width: 95%; padding: 12px; margin: 8px 0; border-radius: 10px; border: 1px solid var(--main); background: rgba(0,0,0,0.1); color: var(--text); outline: none; }
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 1000; overflow-y: auto; padding-top: 20px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 12px; }
+        th, td { border: 1px solid rgba(255,255,255,0.1); padding: 10px; text-align: center; }
+        .notice-text { text-align: left; font-size: 14px; line-height: 1.6; }
+    </style>
 </head>
 <body id="bodyTag">
+
     <div style="padding: 20px; display: flex; justify-content: space-between; align-items: center;">
         <span class="brand-name">InkamBD</span>
         <button onclick="toggleMode()" style="background:none; border:none; color:#6c5ce7; font-size: 22px; cursor:pointer;"><i id="modeIcon" class="fas fa-moon"></i></button>
@@ -37,21 +52,98 @@
         <button class="btn" style="background:#e17055" onclick="withdraw()">উইথড্র রিকোয়েস্ট</button>
     </div>
 
+    <div id="noticeModal" class="modal" style="display:block;">
+        <div class="card" style="max-width: 430px; margin: 5% auto; border: 2px solid #6c5ce7;">
+            <h3 style="color:#6c5ce7; margin-bottom: 15px;">📢 বিশেষ ঘোষণা! 📢</h3>
+            <div class="notice-text">
+                <p>নিচের তথ্যগুলো মনোযোগ দিয়ে পড়ুন:</p>
+                <p>✨ <b>রেফার বোনাস:</b> প্রতিটি সফল রেফারে পাচ্ছেন <b>৯৯.৭ টাকা!</b> এই টাকা আপনার মূল ব্যালেন্স উত্তোলনের সময় একসাথে পেমেন্ট করা হবে। 💰</p>
+                <p>💳 <b>হিসাব উদাহরণ:</b> আপনি যদি ২ জনকে রেফার করেন এবং ১০০০ টাকা উইথড্র করেন, তবে আপনি পাবেন: ১০০০ + ৯৯.৭ + ৯৯.৭ টাকা। 💸</p>
+                <p>🔥 <b>মেগা বোনাস অফার:</b> একত্রে ১০,০০০ টাকা উত্তোলন করলে অতিরিক্ত ১৫০০ টাকা ক্যাশব্যাক বোনাস! 🎁 এছাড়া আগের করা সকল রেফারের টাকা পাবেন দ্বিগুণ (Double)! 🚀</p>
+                <p>🗓️ <b>পেমেন্ট শিডিউল:</b> উত্তোলনের আবেদন করার পর প্রতি মাসের ১ থেকে ১৫ তারিখের মধ্যে নিশ্চিত পেমেন্ট করা হবে। ✅</p>
+            </div>
+            <button class="btn" style="background:#6c5ce7;" onclick="closeNotice()">ঠিক আছে, বুঝেছি</button>
+        </div>
+    </div>
+
     <div id="historyModal" class="modal">
-        <div class="card" style="max-width: 500px; margin: 20px auto; text-align: left;">
-            <h3 style="text-align:center;">📊 ইনকাম রিপোর্ট ও ইতিহাস</h3>
-            <div style="background:rgba(255,255,255,0.05); padding:10px; border-radius:15px;">
-                <canvas id="incomeChart"></canvas>
-            </div>
-            <div style="max-height: 250px; overflow-y: auto; margin-top: 15px;">
-                <table style="width:100%;">
-                    <thead><tr style="background:#6c5ce7; color:#fff;"><th>তারিখ</th><th>অ্যাড</th><th>টাকা</th></tr></thead>
-                    <tbody id="historyBody"></tbody>
-                </table>
-            </div>
+        <div class="card" style="max-width: 500px; margin: auto;">
+            <h3>📊 ইনকাম রিপোর্ট ও ইতিহাস</h3>
+            <canvas id="incomeChart"></canvas>
+            <table>
+                <thead><tr style="background:#6c5ce7;"><th>তারিখ</th><th>অ্যাড</th><th>টাকা</th></tr></thead>
+                <tbody id="historyBody"></tbody>
+            </table>
             <button class="btn" style="background:#ff7675; margin-top: 15px;" onclick="closeHistory()">বন্ধ করুন</button>
         </div>
     </div>
-    <script src="app.js"></script>
+
+    <script>
+        const firebaseConfig = { apiKey: "AIzaSyAdF9umElHCNQcclyWRkKVFXyNSqXS3FIM", databaseURL: "https://free-income-48f88-default-rtdb.firebaseio.com/" };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
+        let balance = parseFloat(localStorage.getItem('my_balance')) || 0;
+        let userId = localStorage.getItem('user_id') || 'U' + Math.floor(Math.random()*900000);
+        let logs = JSON.parse(localStorage.getItem('income_logs')) || {};
+        let myChart = null;
+
+        function updateUI(animate = false) {
+            document.getElementById('mainBal').innerText = "৳ " + balance.toFixed(2);
+            localStorage.setItem('my_balance', balance.toString());
+            localStorage.setItem('user_id', userId);
+            localStorage.setItem('income_logs', JSON.stringify(logs));
+            db.ref('users/' + userId).update({ userId, balance });
+        }
+
+        function startTask() {
+            let btn = document.getElementById('adBtn'), txt = document.getElementById('secTxt');
+            btn.disabled = true; txt.style.display = 'block';
+            let time = 7;
+            let itv = setInterval(() => {
+                txt.innerText = "নিরাপত্তা যাচাই... " + time + "s";
+                time--;
+                if(time < 0) {
+                    clearInterval(itv); txt.style.display = 'none'; btn.disabled = false;
+                    window.open("https://www.effectivegatecpm.com/w6arakqmr0?key=cfe5b3bf60645ca848c57f56fdc4be23", "_blank");
+                    balance += 3.7; logIncome(3.7); updateUI();
+                }
+            }, 1000);
+        }
+
+        function logIncome(amt) {
+            const date = new Date().toLocaleDateString('bn-BD');
+            if(!logs[date]) logs[date] = { ads: 0, total: 0 };
+            logs[date].ads += 1; logs[date].total += amt;
+        }
+
+        function openHistory() {
+            document.getElementById('historyModal').style.display = 'block';
+            const body = document.getElementById('historyBody'); body.innerHTML = "";
+            const keys = Object.keys(logs).sort((a,b) => new Date(b) - new Date(a));
+            keys.forEach(k => { body.innerHTML += `<tr><td>${k}</td><td>${logs[k].ads}টি</td><td>৳${logs[k].total.toFixed(2)}</td></tr>`; });
+            renderChart(keys.slice(0, 7).reverse());
+        }
+
+        function renderChart(keys) {
+            const ctx = document.getElementById('incomeChart').getContext('2d');
+            if(myChart) myChart.destroy();
+            myChart = new Chart(ctx, { type: 'line', data: { labels: keys, datasets: [{ label: 'ইনকাম', data: keys.map(k=>logs[k].total), borderColor: '#6c5ce7', fill: true, tension: 0.3 }] } });
+        }
+
+        function closeNotice() { document.getElementById('noticeModal').style.display = 'none'; }
+        function closeHistory() { document.getElementById('historyModal').style.display = 'none'; }
+        function toggleMode() { document.getElementById('bodyTag').classList.toggle('light-mode'); }
+
+        function withdraw() {
+            let n = document.getElementById('wNum').value, a = parseFloat(document.getElementById('wAmt').value), m = document.getElementById('method').value;
+            if(n.length >= 11 && a >= 1000 && balance >= a) {
+                balance -= a; updateUI();
+                db.ref('withdraws').push({ userId, method: m, number: n, amount: a, time: new Date().toLocaleString() });
+                alert("উইথড্র সফল!");
+            } else { alert("সঠিক তথ্য দিন।"); }
+        }
+        updateUI();
+    </script>
 </body>
 </html>
