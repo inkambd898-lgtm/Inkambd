@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>By - InkamBD</title>
+    <title>InkamBD - Earn Online</title>
     
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
@@ -38,7 +38,7 @@
     </div>
 
     <div class="card">
-        <h3 style="margin:0;"><i class="fas fa-users"></i> আপনার অরিজিনাল রেফার লিংক</h3>
+        <h3 style="margin:0;"><i class="fas fa-users"></i> আপনার রেফার লিংক</h3>
         <div class="ref-box" id="refLink">লিংক তৈরি হচ্ছে...</div>
         <button class="btn" style="background:#00b894;" onclick="copyRef()">
             <i class="fas fa-copy"></i> লিংক কপি করুন
@@ -95,16 +95,11 @@
                 time--;
                 if(time < 0) {
                     clearInterval(itv); txt.style.display = 'none'; btn.disabled = false;
-                    
-                    // এখানে window.open এর বদলে সরাসরি নতুন ট্যাব ওপেন করার চেষ্টা করা হয়েছে
                     const adLink = "https://www.effectivegatecpm.com/w6arakqmr0?key=cfe5b3bf60645ca848c57f56fdc4be23";
-                    
-                    // এই পদ্ধতিতে পপ-আপ ব্লকার আটকানোর সম্ভাবনা কম
                     let a = document.createElement('a');
                     a.href = adLink;
                     a.target = '_blank';
                     a.click();
-                    
                     balance += 3.7; 
                     updateUI();
                 }
