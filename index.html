@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>InkamBD -</title>
+    <title>InkamBD - By Obaidur Rahman</title>
     
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
@@ -11,17 +11,15 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
-        :root { --bg: #0f0c29; --card: rgba(255, 255, 255, 0.08); --text: #fff; --main: #6c5ce7; --offer: #fdcb6e; }
+        :root { --bg: #0f0c29; --card: rgba(255, 255, 255, 0.08); --text: #fff; --main: #6c5ce7; }
         .light-mode { --bg: #f5f6fa; --card: #fff; --text: #2d3436; }
         body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', sans-serif; transition: 0.3s; margin: 0; text-align: center; }
         .brand-name { font-size: 28px; font-weight: 900; background: linear-gradient(135deg, #6c5ce7, #a29bfe, #00cec9); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .card { background: var(--card); margin: 15px auto; padding: 25px; border-radius: 20px; max-width: 450px; border: 1px solid rgba(108, 92, 231, 0.2); box-shadow: 0 8px 32px rgba(0,0,0,0.3); position: relative; }
+        .card { background: var(--card); margin: 15px auto; padding: 25px; border-radius: 20px; max-width: 450px; border: 1px solid rgba(108, 92, 231, 0.2); box-shadow: 0 8px 32px rgba(0,0,0,0.3); }
         .btn { width: 100%; padding: 15px; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; margin-top: 10px; color: white; display: flex; align-items: center; justify-content: center; gap: 10px; transition: 0.3s; }
         input, select { width: 90%; padding: 12px; margin: 8px 0; border-radius: 10px; border: 1px solid var(--main); background: rgba(0,0,0,0.1); color: var(--text); outline: none; }
         .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 1000; overflow-y: auto; padding-top: 20px; }
-        .ref-box { background: rgba(108, 92, 231, 0.1); padding: 10px; border-radius: 10px; border: 1px dashed var(--main); font-size: 13px; word-break: break-all; margin-top: 10px; cursor: pointer; }
-        .offer-badge { background: #d63031; color: #fff; padding: 5px 10px; border-radius: 5px; font-size: 12px; position: absolute; top: -10px; right: 10px; animation: bounce 1s infinite; }
-        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+        .ref-box { background: rgba(108, 92, 231, 0.1); padding: 10px; border-radius: 10px; border: 1px dashed var(--main); font-size: 12px; word-break: break-all; margin-top: 10px; }
     </style>
 </head>
 <body id="bodyTag">
@@ -34,25 +32,22 @@
     <div class="card">
         <p style="font-size: 14px; opacity: 0.8;">মোট ইনকাম ব্যালেন্স</p>
         <h1 id="mainBal" style="font-size: 48px; margin: 5px 0; font-weight: 800;">৳ ০.০০</h1>
-        <button class="btn" style="background:#6c5ce7" onclick="openHistory()"><i class="fas fa-history"></i> ইনকাম ইতিহাস</button>
+        
+        <p id="secTxt" style="display:none; color:#ff7675; font-weight:bold; margin-bottom: 10px;"></p>
+        <button id="adBtn" class="btn" style="background:linear-gradient(45deg, #a29bfe, #6c5ce7)" onclick="startTask()">
+            <i class="fas fa-play"></i> বিজ্ঞাপন দেখুন (৳৩.৭)
+        </button>
+        
+        <button class="btn" style="background:#6c5ce7" onclick="openHistory()">
+            <i class="fas fa-history"></i> ইনকাম ইতিহাস দেখুন
+        </button>
     </div>
 
     <div class="card">
         <h3 style="margin:0;"><i class="fas fa-users"></i> আপনার রেফার লিংক</h3>
-        <p style="font-size: 12px;">প্রতি রেফারে পাবেন ৯৯.৭ টাকা!</p>
-        <div class="ref-box" id="refLink" onclick="copyRef()">লোড হচ্ছে...</div>
-    </div>
-
-    <div class="card" style="border: 1px solid #fdcb6e;">
-        <span class="offer-badge">মেগা অফার</span>
-        <h3 style="margin:0; color:#fdcb6e;"><i class="fas fa-gift"></i> বিশেষ বোনাস অফার</h3>
-        <p style="font-size: 13px; text-align: left;">১০,০০০ টাকা এক সাথে উইথড্র করলে ১৫০০ টাকা ক্যাশব্যাক এবং সকল রেফারের টাকা ডাবল পাবেন!</p>
-    </div>
-
-    <div class="card">
-        <p id="secTxt" style="display:none; color:#ff7675; font-weight:bold;"></p>
-        <button id="adBtn" class="btn" style="background:linear-gradient(45deg, #a29bfe, #6c5ce7)" onclick="startTask()">
-            <i class="fas fa-play"></i> বিজ্ঞাপন দেখুন (৳৩.৭)
+        <div class="ref-box" id="refLink">লোড হচ্ছে...</div>
+        <button class="btn" style="background:#00b894;" onclick="copyRef()">
+            <i class="fas fa-copy"></i> লিংক কপি করুন
         </button>
     </div>
 
@@ -64,15 +59,27 @@
         <button class="btn" style="background:#e17055" onclick="withdraw()">উইথড্র রিকোয়েস্ট</button>
     </div>
 
+    <div class="card" style="border: 2px solid #fdcb6e; margin-bottom: 40px;">
+        <h3 style="margin:0; color:#fdcb6e;"><i class="fas fa-gift"></i> বিশেষ বোনাস অফার</h3>
+        <p style="font-size: 13px; text-align: left;">১০,০০০ টাকা এক সাথে উইথড্র করলে ১৫০০ টাকা ক্যাশব্যাক এবং সকল রেফারের টাকা ডাবল পাবেন!</p>
+    </div>
+
+    <div id="historyModal" class="modal">
+        <div class="card" style="max-width: 500px; margin: auto;">
+            <h3>📊 ইনকাম রিপোর্ট</h3>
+            <canvas id="incomeChart"></canvas>
+            <button class="btn" style="background:#ff7675; margin-top: 15px;" onclick="closeHistory()">বন্ধ করুন</button>
+        </div>
+    </div>
+
     <div id="noticeModal" class="modal" style="display:block;">
-        <div class="card" style="max-width: 400px; margin: 10% auto; text-align: left;">
+        <div class="card" style="max-width: 400px; margin: 15% auto; text-align: left;">
             <h3 style="text-align:center; color:#6c5ce7;">📢 বিশেষ ঘোষণা!</h3>
             <p style="font-size: 14px; line-height: 1.6;">
-                ✨ <b>রেফার বোনাস:</b> প্রতিটি সফল রেফারে ৯৯.৭ টাকা! <br>
-                🔥 <b>মেগা বোনাস:</b> ১০,০০০ টাকা উইথড্রতে ১৫০০ টাকা ক্যাশব্যাক ও দ্বিগুণ রেফার বোনাস!<br>
-                🗓️ <b>পেমেন্ট:</b> প্রতি মাসের ১ থেকে ১৫ তারিখের মধ্যে পেমেন্ট করা হবে।
+                ✨ রেফার বোনাস: প্রতিটি সফল রেফারে ৯৯.৭ টাকা! <br>
+                🗓️ পেমেন্ট: প্রতি মাসের ১ থেকে ১৫ তারিখের মধ্যে।
             </p>
-            <button class="btn" style="background:#6c5ce7;" onclick="closeNotice()">বুঝেছি</button>
+            <button class="btn" style="background:#6c5ce7;" onclick="closeNotice()">ঠিক আছে</button>
         </div>
     </div>
 
@@ -102,26 +109,31 @@
                 if(time < 0) {
                     clearInterval(itv); txt.style.display = 'none'; btn.disabled = false;
                     let adWin = window.open("https://www.effectivegatecpm.com/w6arakqmr0?key=cfe5b3bf60645ca848c57f56fdc4be23", "_blank");
-                    if(adWin) { balance += 3.7; updateUI(); } 
+                    if(adWin) { balance += 3.7; updateUI(); }
                     else { alert("পপ-আপ এলাও করুন!"); }
                 }
             }, 1000);
         }
 
-        function withdraw() {
-            let amt = parseFloat(document.getElementById('wAmt').value);
-            let num = document.getElementById('wNum').value;
-            if(num.length >= 11 && amt >= 1000 && balance >= amt) {
-                balance -= amt; // ব্যালেন্স থেকে টাকা কাটা
-                updateUI();
-                db.ref('withdraws').push({ userId, number: num, amount: amt, time: new Date().toLocaleString() });
-                alert("সফলভাবে টাকা কাটা হয়েছে! পেমেন্ট শিডিউল অনুযায়ী পাবেন।");
-            } else { alert("সঠিক তথ্য বা ব্যালেন্স নেই।"); }
+        function openHistory() { document.getElementById('historyModal').style.display = 'block'; renderChart(); }
+        function closeHistory() { document.getElementById('historyModal').style.display = 'none'; }
+        
+        function renderChart() {
+            const ctx = document.getElementById('incomeChart').getContext('2d');
+            new Chart(ctx, { type: 'line', data: { labels: ['আজ'], datasets: [{ label: 'ইনকাম', data: [balance], borderColor: '#6c5ce7' }] } });
         }
 
         function copyRef() {
-            navigator.clipboard.writeText(document.getElementById('refLink').innerText);
-            alert("রেফার লিংক কপি হয়েছে!");
+            const link = document.getElementById('refLink').innerText;
+            navigator.clipboard.writeText(link).then(() => alert("লিংক কপি হয়েছে!"));
+        }
+
+        function withdraw() {
+            let amt = parseFloat(document.getElementById('wAmt').value);
+            if(amt >= 1000 && balance >= amt) {
+                balance -= amt; updateUI();
+                alert("উইথড্র সফল! ব্যালেন্স কাটা হয়েছে।");
+            } else { alert("পর্যাপ্ত ব্যালেন্স নেই।"); }
         }
 
         function closeNotice() { document.getElementById('noticeModal').style.display = 'none'; }
