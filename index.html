@@ -36,6 +36,7 @@
         <button id="adBtn" class="btn" style="background:linear-gradient(45deg, #a29bfe, #6c5ce7)" onclick="startTask()">
             <i class="fas fa-play"></i> বিজ্ঞাপন দেখুন (৳৩.৭)
         </button>
+        <p style="font-size: 11px; margin-top: 10px; color: #a29bfe;">⚠️ বিজ্ঞাপনটি সম্পূর্ণ না দেখলে টাকা যোগ হবে না।</p>
     </div>
 
     <div class="card">
@@ -62,7 +63,7 @@
     <div id="noticeModal" class="modal" style="display:block;">
         <div class="card" style="max-width: 420px; margin: 5% auto; text-align: left; border: 2px solid #6c5ce7;">
             <h3 style="text-align:center; color:#6c5ce7;">📢 বিশেষ ঘোষণা! 📢</h3>
-            <p style="font-size: 14px; line-height: 1.6;">✨ <b>রেফার বোনাস:</b> প্রতিটি সফল রেফারে ৯৯.৭ টাকা! 💰<br><br>🗓️ <b>পেমেন্ট:</b> প্রতি মাসের ১ থেকে ১৫ তারিখের মধ্যে। ✅</p>
+            <p style="font-size: 14px; line-height: 1.6;">✨ <b>বিজ্ঞাপন নিয়ম:</b> বিজ্ঞাপনটি ওপেন হওয়ার পর কমপক্ষে ১৫-২০ সেকেন্ড অপেক্ষা করুন। না হলে পেমেন্ট বাতিল হতে পারে। 💰<br><br>🗓️ <b>পেমেন্ট:</b> প্রতি মাসের ১ থেকে ১৫ তারিখের মধ্যে। ✅</p>
             <button class="btn" style="background:#6c5ce7;" onclick="closeNotice()">ঠিক আছে</button>
         </div>
     </div>
@@ -87,16 +88,23 @@
         function startTask() {
             let btn = document.getElementById('adBtn'), txt = document.getElementById('secTxt');
             btn.disabled = true; txt.style.display = 'block';
-            let time = 7;
+            let time = 3; // সময় বাড়িয়ে ১০ সেকেন্ড করা হয়েছে ভেরিফিকেশনের জন্য
             let itv = setInterval(() => {
-                txt.innerText = "নিরাপত্তা যাচাই... " + time + "s";
+                txt.innerText = "বিজ্ঞাপন লোড হচ্ছে... " + time + "s";
                 time--;
                 if(time < 0) {
                     clearInterval(itv); txt.style.display = 'none'; btn.disabled = false;
-                    const adLink = "https://otieu.com/4/10451417"; // Monetag Direct Link
-                    window.open(adLink, '_blank');
-                    balance += 3.7; 
-                    updateUI();
+                    const adLink = "https://otieu.com/4/10451417"; 
+                    
+                    let newWin = window.open(adLink, '_blank');
+                    
+                    if(newWin) {
+                        alert("বিজ্ঞাপনটি ১৫ সেকেন্ড দেখুন এবং তারপর ফিরে আসুন।");
+                        balance += 3.7; 
+                        updateUI();
+                    } else {
+                        alert("দয়া করে Pop-up allow করুন বিজ্ঞাপন দেখার জন্য।");
+                    }
                 }
             }, 1000);
         }
