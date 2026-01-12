@@ -38,6 +38,35 @@
         </button>
     </div>
 
+    <div class="card">
+        <h3 style="margin:0;"><i class="fas fa-users"></i> আপনার রেফার লিংক</h3>
+        <div class="ref-box" id="refLink">লিংক তৈরি হচ্ছে...</div>
+        <button class="btn" style="background:#00b894;" onclick="copyRef()">
+            <i class="fas fa-copy"></i> লিংক কপি করুন
+        </button>
+    </div>
+
+    <div class="card">
+        <h3 style="margin:0;">টাকা উত্তোলন</h3>
+        <select id="method"><option value="bKash">বিকাশ (bKash)</option><option value="Nagad">নগদ (Nagad)</option></select>
+        <input id="wNum" type="number" placeholder="আপনার নম্বর">
+        <input id="wAmt" type="number" placeholder="পরিমাণ (১০০০ - ১০০০০)">
+        <button class="btn" style="background:#e17055" onclick="withdraw()">উইথড্র রিকোয়েস্ট</button>
+    </div>
+
+    <div class="card" style="border: 2px solid #fdcb6e; margin-bottom: 40px;">
+        <h3 style="margin:0; color:#fdcb6e;"><i class="fas fa-gift"></i> বিশেষ বোনাস অফার</h3>
+        <p style="font-size: 13px; text-align: left;">একত্রে ১০,০০০ টাকা উত্তোলন করলে অতিরিক্ত ১৫০০ টাকা ক্যাশব্যাক বোনাস! 🎁 রেফার এর টাকা বিকাশ/নগদ ব্যালেন্স এর সাথে পাঠানো হবে🚀</p>
+    </div>
+
+    <div id="noticeModal" class="modal" style="display:block;">
+        <div class="card" style="max-width: 420px; margin: 5% auto; text-align: left; border: 2px solid #6c5ce7;">
+            <h3 style="text-align:center; color:#6c5ce7;">📢 বিশেষ ঘোষণা! 📢</h3>
+            <p style="font-size: 14px; line-height: 1.6;">✨ <b>রেফার বোনাস:</b> প্রতিটি সফল রেফারে ৯৯.৭ টাকা! 💰<br><br>🗓️ <b>পেমেন্ট:</b> প্রতি মাসের ১ থেকে ১৫ তারিখের মধ্যে। ✅</p>
+            <button class="btn" style="background:#6c5ce7;" onclick="closeNotice()">ঠিক আছে</button>
+        </div>
+    </div>
+
     <script>
         const firebaseConfig = { apiKey: "AIzaSyAdF9umElHCNQcclyWRkKVFXyNSqXS3FIM", databaseURL: "https://free-income-48f88-default-rtdb.firebaseio.com/" };
         firebase.initializeApp(firebaseConfig);
@@ -58,20 +87,35 @@
         function startTask() {
             let btn = document.getElementById('adBtn'), txt = document.getElementById('secTxt');
             btn.disabled = true; txt.style.display = 'block';
-            let time = 0;
+            let time = 7;
             let itv = setInterval(() => {
                 txt.innerText = "নিরাপত্তা যাচাই... " + time + "s";
                 time--;
                 if(time < 0) {
                     clearInterval(itv); txt.style.display = 'none'; btn.disabled = false;
-                    const adLink = "https://otieu.com/4/10451417"; 
+                    const adLink = "https://otieu.com/4/10451417"; // Monetag Direct Link
                     window.open(adLink, '_blank');
                     balance += 3.7; 
                     updateUI();
                 }
             }, 1000);
         }
-        // অন্যান্য ফাংশন আগের মতোই...
+
+        function withdraw() {
+            let amt = parseFloat(document.getElementById('wAmt').value);
+            if(amt >= 1000 && balance >= amt) {
+                balance -= amt; updateUI();
+                alert("উইথড্র রিকোয়েস্ট সফল হয়েছে।");
+            } else { alert("পর্যাপ্ত ব্যালেন্স নেই।"); }
+        }
+
+        function copyRef() {
+            const link = document.getElementById('refLink').innerText;
+            navigator.clipboard.writeText(link).then(() => alert("রেফার লিংক কপি হয়েছে!"));
+        }
+
+        function closeNotice() { document.getElementById('noticeModal').style.display = 'none'; }
+        function toggleMode() { document.getElementById('bodyTag').classList.toggle('light-mode'); }
         window.onload = updateUI;
     </script>
 </body>
