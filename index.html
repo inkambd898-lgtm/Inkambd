@@ -3,59 +3,138 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>InkamBD | Notice</title>
+    <title>InkamBD</title>
+    
+    <meta name="monetag" content="8ec67ca6469a5d1faa654cf63765c603">
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body {
-            background: #0f0c29;
-            color: #fff;
-            font-family: 'Segoe UI', sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-        .notice-card {
-            background: rgba(255, 255, 255, 0.08);
-            padding: 30px;
-            border-radius: 20px;
-            max-width: 400px;
-            width: 90%;
-            text-align: center;
-            border: 1px solid rgba(108, 92, 231, 0.3);
-            box-shadow: 0 8px 32px rgba(0,0,0,0.5);
-            backdrop-filter: blur(10px);
-        }
-        .brand {
-            font-size: 24px;
-            font-weight: 900;
-            background: linear-gradient(135deg, #6c5ce7, #00cec9);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 20px;
-        }
-        .time-box {
-            background: rgba(108, 92, 231, 0.1);
-            padding: 15px;
-            border-radius: 12px;
-            border: 1px dashed #6c5ce7;
-            margin-top: 15px;
-        }
-        .time-text {
-            color: #ffd700;
-            font-weight: bold;
-            font-size: 18px;
-        }
+        :root { --bg: #0f0c29; --card: rgba(255, 255, 255, 0.08); --text: #fff; --main: #6c5ce7; }
+        .light-mode { --bg: #f5f6fa; --card: #fff; --text: #2d3436; }
+        body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', sans-serif; transition: 0.3s; margin: 0; text-align: center; }
+        .brand-name { font-size: 28px; font-weight: 900; background: linear-gradient(135deg, #6c5ce7, #a29bfe, #00cec9); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .card { background: var(--card); margin: 15px auto; padding: 25px; border-radius: 20px; max-width: 450px; border: 1px solid rgba(108, 92, 231, 0.2); box-shadow: 0 8px 32px rgba(0,0,0,0.3); }
+        .btn { width: 100%; padding: 15px; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; margin-top: 10px; color: white; display: flex; align-items: center; justify-content: center; gap: 10px; transition: 0.3s; }
+        input, select { width: 90%; padding: 12px; margin: 8px 0; border-radius: 10px; border: 1px solid var(--main); background: rgba(0,0,0,0.1); color: var(--text); outline: none; }
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 1000; overflow-y: auto; padding-top: 20px; }
+        .ref-box { background: rgba(108, 92, 231, 0.1); padding: 12px; border-radius: 10px; border: 1px dashed var(--main); font-size: 13px; word-break: break-all; margin-top: 10px; color: #a29bfe; font-weight: bold; }
     </style>
 </head>
-<body>
-    <div class="notice-card">
-        <div class="brand">InkamBD</div>
-        <p style="opacity: 0.8; margin: 0;">আমাদের সেবা চালুর সময়</p>
-        <div class="time-box">
-            <span class="time-text">বিকাল ৩টা থেকে সন্ধ্যা ৭টা</span>
-        </div>
-        <p style="font-size: 12px; color: #ff7675; margin-top: 20px;">নির্ধারিত সময়ের বাইরে কাজ করা যাবে না।</p>
+<body id="bodyTag">
+
+    <div style="padding: 20px; display: flex; justify-content: space-between; align-items: center;">
+        <span class="brand-name">InkamBD</span>
+        <button onclick="toggleMode()" style="background:none; border:none; color:#6c5ce7; font-size: 22px; cursor:pointer;"><i id="modeIcon" class="fas fa-moon"></i></button>
     </div>
+
+    <div class="card">
+        <p style="font-size: 14px; opacity: 0.8;">মোট ইনকাম ব্যালেন্স</p>
+        <h1 id="mainBal">৳ ০.০০</h1>
+        <p id="secTxt" style="display:none; color:#ff7675; font-weight:bold; margin-bottom: 10px;"></p>
+        <button id="adBtn" class="btn" style="background:linear-gradient(45deg, #a29bfe, #6c5ce7)" onclick="startTask()">
+            <i class="fas fa-play"></i> বিজ্ঞাপন দেখুন (৳৩.৭)
+        </button>
+        <p style="font-size: 11px; margin-top: 10px; color: #ff7675;">⚠️ সতর্কতা: বিজ্ঞাপন কমপক্ষে ৫ সেকেন্ড না দেখলে ৫ টাকা জরিমানা করা হবে!</p>
+    </div>
+
+    <div class="card">
+        <h3 style="margin:0;"><i class="fas fa-users"></i> আপনার রেফার লিংক</h3>
+        <div class="ref-box" id="refLink">লিংক তৈরি হচ্ছে...</div>
+        <button class="btn" style="background:#00b894;" onclick="copyRef()">
+            <i class="fas fa-copy"></i> লিংক কপি করুন
+        </button>
+    </div>
+
+    <div class="card">
+        <h3 style="margin:0;">টাকা উত্তোলন</h3>
+        <select id="method"><option value="bKash">বিকাশ (bKash)</option><option value="Nagad">নগদ (Nagad)</option></select>
+        <input id="wNum" type="number" placeholder="আপনার নম্বর">
+        <input id="wAmt" type="number" placeholder="পরিমাণ (১০০০ - ১০০০০)">
+        <button class="btn" style="background:#e17055" onclick="withdraw()">উইথড্র রিকোয়েস্ট</button>
+    </div>
+
+    <div class="card" style="border: 2px solid #fdcb6e; margin-bottom: 40px;">
+        <h3 style="margin:0; color:#fdcb6e;"><i class="fas fa-gift"></i> বিশেষ বোনাস অফার</h3>
+        <p style="font-size: 13px; text-align: left;">একত্রে ১০,০০০ টাকা উত্তোলন করলে অতিরিক্ত ১৫০০ টাকা ক্যাশব্যাক বোনাস! 🎁 এছাড়া আগের সকল রেফারের টাকা পাবেন দ্বিগুণ (Double)! রেফার এর টাকা বিকাশ/নগদ ব্যালেন্স এর সাথে পাঠানো হবে🚀</p>
+    </div>
+
+    <div id="noticeModal" class="modal" style="display:block;">
+        <div class="card" style="max-width: 420px; margin: 5% auto; text-align: left; border: 2px solid #6c5ce7;">
+            <h3 style="text-align:center; color:#6c5ce7;">📢 বিশেষ ঘোষণা! 📢</h3>
+            <p style="font-size: 14px; line-height: 1.6;">✨ <b>রেফার বোনাস:</b> প্রতিটি সফল রেফারে ৯৯.৭ টাকা! 💰<br><br>🗓️ <b>পেমেন্ট:</b> প্রতি মাসের ১ থেকে ১৫ তারিখের মধ্যে। ✅</p>
+            <button class="btn" style="background:#6c5ce7;" onclick="closeNotice()">ঠিক আছে</button>
+        </div>
+    </div>
+
+    <script>
+        const firebaseConfig = { apiKey: "AIzaSyAdF9umElHCNQcclyWRkKVFXyNSqXS3FIM", databaseURL: "https://free-income-48f88-default-rtdb.firebaseio.com/" };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
+        let balance = parseFloat(localStorage.getItem('my_balance')) || 0;
+        let userId = localStorage.getItem('user_id') || 'U' + Math.floor(100000 + Math.random() * 900000);
+
+        function updateUI() {
+            document.getElementById('mainBal').innerText = "৳ " + balance.toFixed(2);
+            let currentPath = window.location.origin + window.location.pathname;
+            document.getElementById('refLink').innerText = currentPath + "?ref=" + userId;
+            localStorage.setItem('my_balance', balance.toFixed(2));
+            localStorage.setItem('user_id', userId);
+            db.ref('users/' + userId).update({ userId, balance: balance.toFixed(2) });
+        }
+
+        function startTask() {
+            let btn = document.getElementById('adBtn'), txt = document.getElementById('secTxt');
+            btn.disabled = true; txt.style.display = 'block';
+            let time = 3;
+            let itv = setInterval(() => {
+                txt.innerText = "লোডিং... " + time + "s";
+                time--;
+                if(time < 0) {
+                    clearInterval(itv);
+                    const adLink = "https://otieu.com/4/10451417";
+                    localStorage.setItem('last_ad_time', Date.now());
+                    window.location.href = adLink;
+                }
+            }, 1000);
+        }
+
+        window.addEventListener('pageshow', function() {
+            let lastTime = localStorage.getItem('last_ad_time');
+            if(lastTime) {
+                let diff = (Date.now() - parseInt(lastTime)) / 1000;
+                localStorage.removeItem('last_ad_time');
+                if(diff >= 5) {
+                    balance += 3.7;
+                    alert("সফল! ৳৩.৭ যোগ করা হয়েছে।");
+                } else {
+                    balance -= 5.0;
+                    alert("আপনি ৫ সেকেন্ড পূর্ণ করেননি! ৫ টাকা জরিমানা কাটা হলো।");
+                }
+                updateUI();
+                document.getElementById('adBtn').disabled = false;
+                document.getElementById('secTxt').style.display = 'none';
+            }
+        });
+
+        function withdraw() {
+            let amt = parseFloat(document.getElementById('wAmt').value);
+            if(amt >= 1000 && balance >= amt) {
+                balance -= amt; updateUI();
+                alert("উইথড্র রিকোয়েস্ট সফল হয়েছে।");
+            } else { alert("পর্যাপ্ত ব্যালেন্স নেই।"); }
+        }
+
+        function copyRef() {
+            const link = document.getElementById('refLink').innerText;
+            navigator.clipboard.writeText(link).then(() => alert("রেফার লিংক কপি হয়েছে!"));
+        }
+
+        function closeNotice() { document.getElementById('noticeModal').style.display = 'none'; }
+        function toggleMode() { document.getElementById('bodyTag').classList.toggle('light-mode'); }
+        window.onload = updateUI;
+    </script>
 </body>
 </html>
