@@ -3,128 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>InkamBD</title>
-    
-    <meta name="monetag" content="8ec67ca6469a5d1faa654cf63765c603">
-
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <title>InkamBD | Service Update</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root { --bg: #0f0c29; --card: rgba(255, 255, 255, 0.08); --text: #fff; --main: #6c5ce7; }
-        .light-mode { --bg: #f5f6fa; --card: #fff; --text: #2d3436; }
-        body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', sans-serif; transition: 0.3s; margin: 0; text-align: center; }
-        .brand-name { font-size: 28px; font-weight: 900; background: linear-gradient(135deg, #6c5ce7, #a29bfe, #00cec9); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .card { background: var(--card); margin: 15px auto; padding: 25px; border-radius: 20px; max-width: 450px; border: 1px solid rgba(108, 92, 231, 0.2); box-shadow: 0 8px 32px rgba(0,0,0,0.3); }
-        .btn { width: 100%; padding: 15px; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; margin-top: 10px; color: white; display: flex; align-items: center; justify-content: center; gap: 10px; transition: 0.3s; }
-        input, select { width: 90%; padding: 12px; margin: 8px 0; border-radius: 10px; border: 1px solid var(--main); background: rgba(0,0,0,0.1); color: var(--text); outline: none; }
-        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 1000; overflow-y: auto; padding-top: 20px; }
-        .ref-box { background: rgba(108, 92, 231, 0.1); padding: 12px; border-radius: 10px; border: 1px dashed var(--main); font-size: 13px; word-break: break-all; margin-top: 10px; color: #a29bfe; font-weight: bold; }
+        :root { --main: #6c5ce7; --bg: #0f0c29; --card: rgba(255, 255, 255, 0.08); }
+        body { background: var(--bg); color: #fff; font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        .notice-card { background: var(--card); padding: 30px; border-radius: 25px; max-width: 400px; width: 90%; text-align: center; border: 1px solid rgba(108, 92, 231, 0.3); backdrop-filter: blur(10px); }
+        .brand { font-size: 28px; font-weight: 900; background: linear-gradient(135deg, #6c5ce7, #00cec9); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 15px; }
+        .status-tag { background: #ff7675; color: white; padding: 5px 15px; border-radius: 50px; font-size: 12px; font-weight: bold; }
+        .info-box { background: rgba(255, 255, 255, 0.05); padding: 15px; border-radius: 15px; margin: 20px 0; border-left: 4px solid #6c5ce7; text-align: left; }
+        .btn { width: 100%; padding: 12px; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.3s; text-decoration: none; color: white; }
+        .btn-report { background: #d63031; }
+        .btn-ref { background: #00b894; }
+        .ref-box { font-size: 11px; background: rgba(0,0,0,0.3); padding: 8px; border-radius: 8px; margin-top: 5px; word-break: break-all; color: #a29bfe; }
     </style>
 </head>
-<body id="bodyTag">
+<body>
 
-    <div style="padding: 20px; display: flex; justify-content: space-between; align-items: center;">
-        <span class="brand-name">InkamBD</span>
-        <button onclick="toggleMode()" style="background:none; border:none; color:#6c5ce7; font-size: 22px; cursor:pointer;"><i id="modeIcon" class="fas fa-moon"></i></button>
-    </div>
-
-    <div class="card">
-        <p style="font-size: 14px; opacity: 0.8;">মোট ইনকাম ব্যালেন্স</p>
-        <h1 id="mainBal">৳ ০.০০</h1>
-        <p id="secTxt" style="display:none; color:#ff7675; font-weight:bold; margin-bottom: 10px;"></p>
-        <button id="adBtn" class="btn" style="background:linear-gradient(45deg, #a29bfe, #6c5ce7)" onclick="startTask()">
-            <i class="fas fa-play"></i> বিজ্ঞাপন দেখুন (৳৩.৭)
-        </button>
-        <p style="font-size: 11px; margin-top: 10px; color: #ff7675;">⚠️ সতর্কতা: বিজ্ঞাপন কমপক্ষে ৫ সেকেন্ড না দেখলে ৫ টাকা জরিমানা করা হবে!</p>
-    </div>
-
-    <div class="card">
-        <h3 style="margin:0;"><i class="fas fa-users"></i> আপনার রেফার লিংক</h3>
-        <div class="ref-box" id="refLink">লিংক তৈরি হচ্ছে...</div>
-        <button class="btn" style="background:#00b894;" onclick="copyRef()">
-            <i class="fas fa-copy"></i> লিংক কপি করুন
-        </button>
-    </div>
-
-    <div class="card">
-        <h3 style="margin:0;">টাকা উত্তোলন</h3>
-        <select id="method"><option value="bKash">বিকাশ (bKash)</option><option value="Nagad">নগদ (Nagad)</option></select>
-        <input id="wNum" type="number" placeholder="আপনার নম্বর">
-        <input id="wAmt" type="number" placeholder="পরিমাণ (১০০০ - ১০০০০)">
-        <button class="btn" style="background:#e17055" onclick="withdraw()">উইথড্র রিকোয়েস্ট</button>
-    </div>
-
-    <div class="card" style="border: 2px solid #fdcb6e; margin-bottom: 40px;">
-        <h3 style="margin:0; color:#fdcb6e;"><i class="fas fa-gift"></i> বিশেষ বোনাস অফার</h3>
-        <p style="font-size: 13px; text-align: left;">একত্রে ১০,০০০ টাকা উত্তোলন করলে অতিরিক্ত ১৫০০ টাকা ক্যাশব্যাক বোনাস! 🎁 এছাড়া আগের সকল রেফারের টাকা পাবেন দ্বিগুণ (Double)! রেফার এর টাকা বিকাশ/নগদ ব্যালেন্স এর সাথে পাঠানো হবে🚀</p>
-    </div>
-
-    <div id="noticeModal" class="modal" style="display:block;">
-        <div class="card" style="max-width: 420px; margin: 5% auto; text-align: left; border: 2px solid #6c5ce7;">
-            <h3 style="text-align:center; color:#6c5ce7;">📢 বিশেষ ঘোষণা! 📢</h3>
-            <p style="font-size: 14px; line-height: 1.6;">✨ <b>রেফার বোনাস:</b> প্রতিটি সফল রেফারে ৯৯.৭ টাকা! 💰<br><br>🗓️ <b>পেমেন্ট:</b> প্রতি মাসের ১ থেকে ১৫ তারিখের মধ্যে। ✅</p>
-            <button class="btn" style="background:#6c5ce7;" onclick="closeNotice()">ঠিক আছে</button>
+    <div class="notice-card">
+        <div class="brand">InkamBD</div>
+        <span class="status-tag">সার্ভিস বন্ধ</span>
+        
+        <div class="info-box">
+            <p style="margin:0; font-size: 14px; line-height: 1.6;">
+                কারিগরি ত্রুটির কারণে বর্তমানে সকল কাজ <b>অনির্দিষ্টকালের জন্য</b> বন্ধ ঘোষণা করা হয়েছে। তবে আপনার <b>রেফার ইনকাম</b> চালু থাকবে।
+            </p>
         </div>
+
+        <div style="margin-bottom: 20px;">
+            <p style="font-size: 13px; margin-bottom: 5px;"><i class="fas fa-share-nodes"></i> আপনার রেফার লিংক:</p>
+            <div class="ref-box" id="refLink">লোডিং...</div>
+            <button class="btn btn-ref" onclick="copyRef()">
+                <i class="fas fa-copy"></i> লিংক কপি করুন
+            </button>
+        </div>
+
+        <hr style="opacity: 0.1;">
+
+        <a href="https://otieu.com/4/10451417" class="btn btn-report">
+            <i class="fas fa-bug"></i> রিপোর্ট করুন
+        </a>
+
+        <p style="font-size: 11px; color: #636e72; margin-top: 15px;">পরবর্তী আপডেট পেতে আমাদের সাথেই থাকুন।</p>
     </div>
 
     <script>
-        const firebaseConfig = { apiKey: "AIzaSyAdF9umElHCNQcclyWRkKVFXyNSqXS3FIM", databaseURL: "https://free-income-48f88-default-rtdb.firebaseio.com/" };
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.database();
-
-        let balance = parseFloat(localStorage.getItem('my_balance')) || 0;
+        // ইউজার আইডি সেটআপ
         let userId = localStorage.getItem('user_id') || 'U' + Math.floor(100000 + Math.random() * 900000);
+        localStorage.setItem('user_id', userId);
 
-        function updateUI() {
-            document.getElementById('mainBal').innerText = "৳ " + balance.toFixed(2);
-            let currentPath = window.location.origin + window.location.pathname;
-            document.getElementById('refLink').innerText = currentPath + "?ref=" + userId;
-            localStorage.setItem('my_balance', balance.toFixed(2));
-            localStorage.setItem('user_id', userId);
-            db.ref('users/' + userId).update({ userId, balance: balance.toFixed(2) });
-        }
-
-        function startTask() {
-            let btn = document.getElementById('adBtn'), txt = document.getElementById('secTxt');
-            btn.disabled = true; txt.style.display = 'block';
-            let time = 3;
-            let itv = setInterval(() => {
-                txt.innerText = "লোডিং... " + time + "s";
-                time--;
-                if(time < 0) {
-                    clearInterval(itv);
-                    const adLink = "https://otieu.com/4/10451417";
-                    localStorage.setItem('last_ad_time', Date.now());
-                    window.location.href = adLink;
-                }
-            }, 1000);
-        }
-
-        window.addEventListener('pageshow', function() {
-            let lastTime = localStorage.getItem('last_ad_time');
-            if(lastTime) {
-                let diff = (Date.now() - parseInt(lastTime)) / 1000;
-                localStorage.removeItem('last_ad_time');
-                if(diff >= 5) {
-                    balance += 3.7;
-                    alert("সফল! ৳৩.৭ যোগ করা হয়েছে।");
-                } else {
-                    balance -= 5.0;
-                    alert("আপনি ৫ সেকেন্ড পূর্ণ করেননি! ৫ টাকা জরিমানা কাটা হলো।");
-                }
-                updateUI();
-                document.getElementById('adBtn').disabled = false;
-                document.getElementById('secTxt').style.display = 'none';
-            }
-        });
-
-        function withdraw() {
-            let amt = parseFloat(document.getElementById('wAmt').value);
-            if(amt >= 1000 && balance >= amt) {
-                balance -= amt; updateUI();
-                alert("উইথড্র রিকোয়েস্ট সফল হয়েছে।");
-            } else { alert("পর্যাপ্ত ব্যালেন্স নেই।"); }
+        // রেফার লিংক জেনারেট
+        function setRef() {
+            let link = window.location.origin + window.location.pathname + "?ref=" + userId;
+            document.getElementById('refLink').innerText = link;
         }
 
         function copyRef() {
@@ -132,9 +63,8 @@
             navigator.clipboard.writeText(link).then(() => alert("রেফার লিংক কপি হয়েছে!"));
         }
 
-        function closeNotice() { document.getElementById('noticeModal').style.display = 'none'; }
-        function toggleMode() { document.getElementById('bodyTag').classList.toggle('light-mode'); }
-        window.onload = updateUI;
+        window.onload = setRef;
     </script>
+
 </body>
 </html>
